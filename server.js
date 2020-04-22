@@ -6,14 +6,40 @@ const port = 9000;
 const csv = require("csv-parser");
 const fs = require("fs");
 const qev_csv = [];
-const detA_csv = [];
-const detB_csv = [];
-const filename = path.normalize(__dirname + "/References/quantified_element_values.csv");
+const detA = [];
+const detB = [];
+const filename = path.normalize(
+  __dirname + "/References/quantified_element_values.csv"
+);
+
+var response;
 
 var model = {
-  element: "",
+  element: "Mg",
   update: function (e) {
     this.element = e;
+    view.render();
+  },
+};
+
+var view = {
+  render: function () {
+    var html = "";
+ 
+    response.sendFile(path.join(__dirname + "/views/index.html"));
+    // html += "<!DOCTYPE html>";
+    // html += "<html>";
+    // html += "<head><title>An MVC Example</title></head>";
+    // html += "<body>";
+    // html += "<h1>Status " + model.element + "</h1>";
+    // html += '<a href="/on">switch on</a><br />';
+    // html += '<a href="/off">switch off</a>';
+    // html += "</body>";
+    // html += "</html>";
+
+
+    // response.writeHead(200, { "Content-Type": "text/html" });
+    // response.end(html + "\n");
   },
 };
 
@@ -23,12 +49,36 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/index.html"));
 });
 
-app.get("/mg", function (req, res) {});
-app.get("/al", function (req, res) {});
-app.get("/ca", function (req, res) {});
-app.get("/ti", function (req, res) {});
-app.get("/fe", function (req, res) {});
-app.get("/si", function (req, res) {});
+app.get("/mg", function (req, res) {
+  response = res;
+  model.update("Mg");
+});
+
+app.get("/al", function (req, res) {
+  response = res;
+  model.update("Al");
+  // res.send("GET request for Al");
+});
+
+app.get("/ca", function (req, res) {
+  response = res;
+  model.update("Ca");
+});
+
+app.get("/ti", function (req, res) {
+  response = res;
+  model.update("Ti");
+});
+
+app.get("/fe", function (req, res) {
+  response = res;
+  model.update("Fe");
+});
+
+app.get("/si", function (req, res) {
+  response = res;
+  model.update("Si");
+});
 
 fs.createReadStream(filename)
   .on("error", () => {
@@ -47,9 +97,9 @@ fs.createReadStream(filename)
 function separateDetectors() {
   for (var i = 0; i < qev_csv.length; i++) {
     if (qev_csv[i].Detector === "A") {
-      detA_csv.push(qev_csv[i]);
+      detA.push(qev_csv[i]);
     } else {
-      detB_csv.push(qev_csv[i]);
+      detB.push(qev_csv[i]);
     }
   }
 }

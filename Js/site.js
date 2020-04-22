@@ -1,5 +1,6 @@
 $(function () {
   window.onload = (event) => {
+  
     // set the dimensions and margins of the graph
     var margin = { top: 80, right: 25, bottom: 50, left: 50 },
       width = 600 - margin.left - margin.right,
