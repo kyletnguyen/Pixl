@@ -5,6 +5,46 @@ const port = 9000;
 
 const csv = require("csv-parser");
 const fs = require("fs");
+
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+const detA_csv = path.normalize(__dirname + "/References/detA.csv");
+
+const detB_csv = path.normalize(__dirname + "/References/detB.csv");
+
+const csvWriterA = createCsvWriter({
+  path: detA_csv,
+  header:
+    //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
+    [
+      { id: "PMC", title: "PMC" },
+      { id: "Mg_%", title: "Mg_%" },
+      { id: "Al_%", title: "Al_%" },
+      { id: "Ca_%", title: "Ca_%" },
+      { id: "Ti_%", title: "Ti_%" },
+      { id: "Fe_%", title: "Fe_%" },
+      { id: "Si_%", title: "Si_%" },
+      { id: "image_i", title: "image_i" },
+      { id: "image_j", title: "image_j" },
+    ],
+});
+
+const csvWriterB = createCsvWriter({
+  path: detB_csv,
+  header:
+    //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
+    [
+      { id: "PMC", title: "PMC" },
+      { id: "Mg_%", title: "Mg_%" },
+      { id: "Al_%", title: "Al_%" },
+      { id: "Ca_%", title: "Ca_%" },
+      { id: "Ti_%", title: "Ti_%" },
+      { id: "Fe_%", title: "Fe_%" },
+      { id: "Si_%", title: "Si_%" },
+      { id: "image_i", title: "image_i" },
+      { id: "image_j", title: "image_j" },
+    ],
+});
+
 const qev_csv = [];
 const detA = [];
 const detB = [];
@@ -25,8 +65,8 @@ var model = {
 var view = {
   render: function () {
     var html = "";
- 
-    response.sendFile(path.join(__dirname + "/views/index.html"));
+
+    response.sendFile(path.join(__dirname + "/views/element.html"));
     // html += "<!DOCTYPE html>";
     // html += "<html>";
     // html += "<head><title>An MVC Example</title></head>";
@@ -36,7 +76,6 @@ var view = {
     // html += '<a href="/off">switch off</a>';
     // html += "</body>";
     // html += "</html>";
-
 
     // response.writeHead(200, { "Content-Type": "text/html" });
     // response.end(html + "\n");
@@ -102,6 +141,16 @@ function separateDetectors() {
       detB.push(qev_csv[i]);
     }
   }
+  csvWriterA
+    .writeRecords(detA) // returns a promise
+    .then(() => {
+      console.log("Wrote CSV file for Detector A");
+    });
+  csvWriterB
+    .writeRecords(detB) // returns a promise
+    .then(() => {
+      console.log("Wrote CSV file for Detector B");
+    });
 }
 
 app.listen(port, () => console.log(`Hosting web application on port ${port}`));
