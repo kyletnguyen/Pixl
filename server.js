@@ -17,12 +17,12 @@ const csvWriterA = createCsvWriter({
     //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
     [
       { id: "PMC", title: "PMC" },
-      { id: "Mg_%", title: "Mg_%" },
-      { id: "Al_%", title: "Al_%" },
-      { id: "Ca_%", title: "Ca_%" },
-      { id: "Ti_%", title: "Ti_%" },
-      { id: "Fe_%", title: "Fe_%" },
-      { id: "Si_%", title: "Si_%" },
+      { id: "Mg_%", title: "Mg" },
+      { id: "Al_%", title: "Al" },
+      { id: "Ca_%", title: "Ca" },
+      { id: "Ti_%", title: "Ti" },
+      { id: "Fe_%", title: "Fe" },
+      { id: "Si_%", title: "Si" },
       { id: "image_i", title: "image_i" },
       { id: "image_j", title: "image_j" },
     ],
@@ -34,12 +34,12 @@ const csvWriterB = createCsvWriter({
     //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
     [
       { id: "PMC", title: "PMC" },
-      { id: "Mg_%", title: "Mg_%" },
-      { id: "Al_%", title: "Al_%" },
-      { id: "Ca_%", title: "Ca_%" },
-      { id: "Ti_%", title: "Ti_%" },
-      { id: "Fe_%", title: "Fe_%" },
-      { id: "Si_%", title: "Si_%" },
+      { id: "Mg_%", title: "Mg" },
+      { id: "Al_%", title: "Al" },
+      { id: "Ca_%", title: "Ca" },
+      { id: "Ti_%", title: "Ti" },
+      { id: "Fe_%", title: "Fe" },
+      { id: "Si_%", title: "Si" },
       { id: "image_i", title: "image_i" },
       { id: "image_j", title: "image_j" },
     ],
@@ -48,9 +48,7 @@ const csvWriterB = createCsvWriter({
 const qev_csv = [];
 const detA = [];
 const detB = [];
-const filename = path.normalize(
-  __dirname + "/References/quantified_element_values.csv"
-);
+const filename = path.normalize(__dirname + "/References/quantified_element_values.csv");
 
 var response;
 
