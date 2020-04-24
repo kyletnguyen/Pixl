@@ -84,7 +84,7 @@ var view = {
     html += '    <script src="./Js/site.js"></script>';
     html += "  </head>";
 
-    html += '  <body class="elment-page">';
+    html += '  <body class="element-page">';
     html += "    <!-- PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j -->";
     html += '    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">';
     html += '      <div class="container">';
