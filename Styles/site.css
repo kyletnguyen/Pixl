@@ -19,11 +19,33 @@ html {
   font-size: 100%;
 }
 
-h1 {
-  color: red;
+.bg-image-full {
+  background: no-repeat center center scroll;
+  background-position: 50% 35%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
 }
 
-.row,
-.col {
-  border: 1px solid black;
+.sep {
+  vertical-align: middle;
+  font-size: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.element-ddl {
+  float: right;
+  margin-right: 70px;
+  margin-top: 10px;
+}
+.detector-group {
+  margin-left: 75px;
+  margin-bottom: 15px;
+}
+
+#legend {
+  float: left;
+  margin-left: 100px;
+  margin-top: 200px;
 }
