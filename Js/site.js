@@ -1,9 +1,10 @@
 $(function () {
-  graphDetector();
+  if ($("body").is(".element-page")) {
+    graphDetector();
+  }
 
   function graphDetector() {
-    var pathArray = window.location.pathname.split("/");
-    var element = pathArray[1].charAt(0).toUpperCase() + pathArray[1].slice(1);
+    var element = $("#elementId").val();
     var elementName;
     var elementPerRef;
 
@@ -296,10 +297,6 @@ $(function () {
     // svg.append("text").attr("x", 0).attr("y", -20).attr("text-anchor", "left").style("font-size", "14px").style("fill", "grey").style("max-width", 400).text("Subtitle");
   }
 
-  $(".detector-btns").on("click", function (e) {
-    graphDetector();
-  });
-
   // create continuous color legend
   function drawLegend(selector_id, colorscale) {
     var legendheight = 500,
@@ -368,10 +365,7 @@ $(function () {
   }
 
   //Event handlers
-  $(".prev-elem").on("click", function () {
-    alert("PREV");
-  });
-  $(".next-elem").on("click", function () {
-    alert("NEXT");
+  $(".detector-btns").on("click", function (e) {
+    graphDetector();
   });
 });
