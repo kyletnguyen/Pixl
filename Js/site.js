@@ -1,7 +1,5 @@
 $(function () {
-  window.onload = (event) => {
-    graphDetector();
-  };
+  graphDetector();
 
   function graphDetector() {
     var pathArray = window.location.pathname.split("/");
