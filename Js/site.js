@@ -6,6 +6,9 @@ $(function () {
   function graphDetector() {
     var pathArray = window.location.pathname.split("/");
     var element = pathArray[1].charAt(0).toUpperCase() + pathArray[1].slice(1);
+    var elementName;
+    var elementPerRef;
+
     var csvRef = $("input[name='detector-select']:checked").val() === "A" ? "References/detA.csv" : "References/detB.csv";
     var detector = $("input[name='detector-select']:checked").val() === "A" ? "A" : "B";
     // set the dimensions and margins of the graph
@@ -34,47 +37,41 @@ $(function () {
     //Read the data
     ///References/detector.csv
     d3.csv(csvRef, function (data) {
-      // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
-      // var myImage_i = d3
-      //   .map(data, function (d) {
-      //     return d.group;
-      //   })
-      //   .keys();
+      //PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j
       var minX = Number.MAX_SAFE_INTEGER;
       var maxX = 0;
       var minY = Number.MAX_SAFE_INTEGER;
       var maxY = 0;
       var minPer = Number.MAX_SAFE_INTEGER;
       var maxPer = 0;
+
       for (var i = 0; i < data.length; i++) {
-        var elementRef;
-        //PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j
         switch (element) {
           case "Mg":
-            elementRef = Number(data[i].Mg);
+            elementPerRef = Number(data[i].Mg);
             break;
           case "Al":
-            elementRef = Number(data[i].Al);
+            elementPerRef = Number(data[i].Al);
             break;
           case "Ca":
-            elementRef = Number(data[i].Ca);
+            elementPerRef = Number(data[i].Ca);
             break;
           case "Ti":
-            elementRef = Number(data[i].Ti);
+            elementPerRef = Number(data[i].Ti);
             break;
           case "Fe":
-            elementRef = Number(data[i].Fe);
+            elementPerRef = Number(data[i].Fe);
             break;
           case "Si":
-            elementRef = Number(data[i].Si);
+            elementPerRef = Number(data[i].Si);
             break;
         }
-        if (elementRef < minPer) {
-          minPer = elementRef;
+        if (elementPerRef < minPer) {
+          minPer = elementPerRef;
         }
 
-        if (elementRef > maxPer) {
-          maxPer = elementRef;
+        if (elementPerRef > maxPer) {
+          maxPer = elementPerRef;
         }
 
         if (Number(data[i].image_i) < minX) {
@@ -104,12 +101,6 @@ $(function () {
         myImage_j[j] = j;
       }
 
-      // var myImage_j = d3
-      //   .map(data, function (d) {
-      //     return d.variable;
-      //   })
-      //   .keys();
-
       // Build X scales and axis:
       var x = d3.scaleBand().range([0, width]).domain(myImage_i).padding(0.05);
       var xAxis = d3
@@ -126,14 +117,6 @@ $(function () {
         .style("font-size", 15)
         .attr("transform", "translate(0," + height + ")")
         .select(".domain");
-
-      // svg
-      //   .append("g")
-      //   .style("font-size", 15)
-      //   .attr("transform", "translate(0," + height + ")")
-      //   .call(d3.axisBottom(x).tickSize(0))
-      //   .select(".domain")
-      //   .remove();
 
       // text label for the x axis
       svg
@@ -193,34 +176,35 @@ $(function () {
         d3.select(this).style("stroke", "red").style("opacity", 1);
       };
       var mousemove = function (d) {
-        var elementRef;
-
-        //PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j
         switch (element) {
           case "Mg":
             elementRef = d.Mg;
+
             break;
           case "Al":
             elementRef = d.Al;
+
             break;
           case "Ca":
             elementRef = d.Ca;
+
             break;
           case "Ti":
             elementRef = d.Ti;
+
             break;
           case "Fe":
             elementRef = d.Fe;
+
             break;
           case "Si":
             elementRef = d.Si;
             break;
         }
-
         tooltip
           .html("<b>" + element + " %: </b>" + elementRef + " <br><b>Location: </b>" + d.image_i + " i : " + d.image_j + " j")
           .style("left", d3.mouse(this)[0] + (width - 1500) + "px")
-          .style("top", d3.mouse(this)[1] + (height - 625) + "px");
+          .style("top", d3.mouse(this)[1] + (height - 550) + "px");
       };
       var mouseleave = function (d) {
         tooltip.style("opacity", 0);
@@ -245,24 +229,26 @@ $(function () {
         .attr("width", x.bandwidth() + 1.5)
         .attr("height", y.bandwidth() + 3)
         .style("fill", function (d) {
-          var elementRef;
-
-          //PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j
           switch (element) {
             case "Mg":
               elementRef = d.Mg;
+
               break;
             case "Al":
               elementRef = d.Al;
+
               break;
             case "Ca":
               elementRef = d.Ca;
+
               break;
             case "Ti":
               elementRef = d.Ti;
+
               break;
             case "Fe":
               elementRef = d.Fe;
+
               break;
             case "Si":
               elementRef = d.Si;
@@ -278,6 +264,26 @@ $(function () {
         .on("mouseleave", mouseleave);
     });
 
+    switch (element) {
+      case "Mg":
+        elementName = "Magnesium";
+        break;
+      case "Al":
+        elementName = "Aluminum";
+        break;
+      case "Ca":
+        elementName = "Calcium";
+        break;
+      case "Ti":
+        elementName = "Titanium";
+        break;
+      case "Fe":
+        elementName = "Iron";
+        break;
+      case "Si":
+        elementName = "Silicon";
+        break;
+    }
     // Add title to graph
     svg
       .append("text")
@@ -286,18 +292,10 @@ $(function () {
       .attr("text-anchor", "left")
       .style("font-size", "22px")
       .attr("font-weight", "bold")
-      .text("Heatmap for " + element + " (Detector " + detector + ")");
+      .text("Heatmap for " + elementName + " (Detector " + detector + ")");
 
     // Add subtitle to graph
-    svg
-      .append("text")
-      .attr("x", 0)
-      .attr("y", -20)
-      .attr("text-anchor", "left")
-      .style("font-size", "14px")
-      .style("fill", "grey")
-      .style("max-width", 400)
-      .text("A short description of the take-away message of this chart.");
+    // svg.append("text").attr("x", 0).attr("y", -20).attr("text-anchor", "left").style("font-size", "14px").style("fill", "grey").style("max-width", 400).text("Subtitle");
   }
 
   $(".detector-btns").on("click", function (e) {
