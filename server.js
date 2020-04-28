@@ -187,38 +187,38 @@ app.get("/si", function (req, res) {
   model.update("Si");
 });
 
-fs.createReadStream(filename)
-  .on("error", () => {
-    console.log("Error reading CSV file");
-  })
-  //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
-  .pipe(csv())
-  .on("data", (row) => {
-    qev_csv.push(row);
-  })
-  .on("end", () => {
-    console.log("Finished CSV file");
-    separateDetectors(qev_csv);
-  });
+// fs.createReadStream(filename)
+//   .on("error", () => {
+//     console.log("Error reading CSV file");
+//   })
+//   //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
+//   .pipe(csv())
+//   .on("data", (row) => {
+//     qev_csv.push(row);
+//   })
+//   .on("end", () => {
+//     console.log("Finished CSV file");
+//     separateDetectors(qev_csv);
+//   });
 
-function separateDetectors() {
-  for (var i = 0; i < qev_csv.length; i++) {
-    if (qev_csv[i].Detector === "A") {
-      detA.push(qev_csv[i]);
-    } else {
-      detB.push(qev_csv[i]);
-    }
-  }
-  csvWriterA
-    .writeRecords(detA) // returns a promise
-    .then(() => {
-      console.log("Wrote CSV file for Detector A");
-    });
-  csvWriterB
-    .writeRecords(detB) // returns a promise
-    .then(() => {
-      console.log("Wrote CSV file for Detector B");
-    });
-}
+// function separateDetectors() {
+//   for (var i = 0; i < qev_csv.length; i++) {
+//     if (qev_csv[i].Detector === "A") {
+//       detA.push(qev_csv[i]);
+//     } else {
+//       detB.push(qev_csv[i]);
+//     }
+//   }
+//   csvWriterA
+//     .writeRecords(detA) // returns a promise
+//     .then(() => {
+//       console.log("Wrote CSV file for Detector A");
+//     });
+//   csvWriterB
+//     .writeRecords(detB) // returns a promise
+//     .then(() => {
+//       console.log("Wrote CSV file for Detector B");
+//     });
+// }
 
 app.listen(port, () => console.log(`Hosting web application on port ${port}`));

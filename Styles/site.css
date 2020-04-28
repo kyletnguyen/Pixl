@@ -46,6 +46,10 @@ html {
 
 #legend {
   float: left;
-  margin-left: 100px;
-  margin-top: 200px;
+  margin-left: 70px;
+  margin-top: 250px;
+}
+
+.pixl-img {
+  opacity: 0.3;
 }
