@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>PIXL Heatmaps</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./Styles/site.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/js/bootstrap.bundle.min.js"></script>
+    <script src="./Js/site.js"></script>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">PIXL Heatmaps</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Elements</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/mg">Magnesium</a>
+                <a class="dropdown-item" href="/al">Aluminum</a>
+                <a class="dropdown-item" href="/ca">Calcium</a>
+                <a class="dropdown-item" href="/ti">Titanium</a>
+                <a class="dropdown-item" href="/fe">Iron</a>
+                <a class="dropdown-item" href="/si">Silicon</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header - set the background image for the header in the line below -->
+    <section class="py-5 bg-image-full" style="background-image: url('/References/mars.jpg');">
+      <!-- Put anything you want here! There is just a spacer below for demo purposes! -->
+      <div style="height: 350px;"></div>
+    </section>
+
+    <!-- Content section -->
+    <section class="py-5">
+      <div class="container">
+        <h1>PIXL: The Planetary Instrument for X-ray Lithochemistry on Mars 2020</h1>
+        <p class="lead">
+          PIXL is a micro-focus X-ray fluorescence instrument for examining fine scale chemical variations in rocks and soils on planetary surfaces.
+        </p>
+        <p>
+          PIXL can measure elemental chemistry of tiny features observed in rocks, such as individual sand grains, veinlets, cements, concentrations and crystals using a 100
+          &#181;m-diameter, high-flux X-ray beam that can be scanned across target surfaces. Making close-up measurements of the elemental chemistry of rocks is a fundamental
+          capability for surface-based explorations of rocky planets.
+        </p>
+      </div>
+    </section>
+
+    <!-- Image Section - set the background image for the header in the line below -->
+    <section class="py-5 bg-image-full" style="background-image: url('/References/code-banner.jpg');">
+      <!-- Put anything you want here! There is just a spacer below for demo purposes! -->
+      <div style="height: 350px;"></div>
+    </section>
+
+    <!-- Content section -->
+    <section class="py-5">
+      <div class="container">
+        <h1>COMP 584: Group 3</h1>
+        <p class="lead">
+          Kyle Nguyen <i class="sep fas fa-circle"></i>Jorge Lopez <i class="sep fas fa-circle"></i>Carl Austin Dimalanta <i class="sep fas fa-circle"></i>Girly Lucena
+          <i class="sep fas fa-circle"></i>Angelica Flores
+        </p>
+        <p>
+          The objective of our project is to implement a web service for the sample data from PIXL and add a baseline visualization of the data.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; PIXL Heatmaps 2020</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+  </body>
+</html>
