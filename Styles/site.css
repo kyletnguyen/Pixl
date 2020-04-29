@@ -52,4 +52,6 @@ html {
 
 .pixl-img {
   opacity: 0.3;
+  margin-left: 100px;
+  margin-top: 200px;
 }

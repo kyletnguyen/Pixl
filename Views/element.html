@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>PIXL Heatmaps</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./Styles/site.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/js/bootstrap.bundle.min.js"></script>
+
+    <script src="./Js/site.js"></script>
+  </head>
+
+  <body>
+    <!-- PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">PIXL Heatmaps</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Elements</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/mg">Magnesium</a>
+                <a class="dropdown-item" href="/al">Aluminum</a>
+                <a class="dropdown-item" href="/ca">Calcium</a>
+                <a class="dropdown-item" href="/ti">Titanium</a>
+                <a class="dropdown-item" href="/fe">Iron</a>
+                <a class="dropdown-item" href="/si">Silicon</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Create a div where the graph will take place -->
+
+    <div class="d-flex flex-row">
+      <div class="d-flex justify-content-start">
+        <div id="detector"></div>
+      </div>
+
+      <div id="legend"></div>
+    </div>
+
+    <br />
+
+    <div class="detector-group btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-light active">
+        <input type="radio" name="detector-select" id="detA-btn" class="detector-btns" autocomplete="off" value="A" checked="checked" /> Detector A
+      </label>
+      <label class="btn btn-light"> <input type="radio" name="detector-select" id="detB-btn" class="detector-btns" autocomplete="off" value="B" /> Detector B </label>
+    </div>
+
+    <!-- <button type="button" class="prev-elem btn btn-secondary btn-sm"><i class="fas fa-chevron-left"></i></button>
+    <button type="button" class="next-elem btn btn-secondary btn-sm"><i class="fas fa-chevron-right"></i></button> -->
+  </body>
+</html>

@@ -15,15 +15,31 @@ console.log('inside site.js')
 
     // var csvRef = $("input[name='detector-select']:checked").val() === "A" ? "References/detA.csv" : "References/detB.csv";
     var csvRef = "/References/quantified_element_values.csv";
+    graphDetector();
+  }
+
+  function graphDetector() {
+    var element = $("#elementId").val();
+    var elementName;
+    var elementPerRef;
+
+    var csvRef = $("input[name='detector-select']:checked").val() === "A" ? "References/detA.csv" : "References/detB.csv";
+
     var detector = $("input[name='detector-select']:checked").val() === "A" ? "A" : "B";
     // set the dimensions and margins of the graph
 
     $("svg").remove();
     $("#legend").empty();
 
+
     var margin = { top: 140, right: 73, bottom: 50, left: 75 },
       width = 900 - margin.left - margin.right,
       height = 770 - margin.top - margin.bottom;
+
+    var margin = { top: 140, right: 25, bottom: 50, left: 75 },
+      width = 1700 - margin.left - margin.right,
+      height = 850 - margin.top - margin.bottom;
+
 
     // append the svg object to the body of the page
     var svg = d3
@@ -49,6 +65,7 @@ console.log('inside site.js')
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
     function zoomed() {
       svg.attr("transform", d3.event.transform);
     }
@@ -62,6 +79,10 @@ console.log('inside site.js')
         return e.Detector == detector;
       });
 
+
+    //Read the data
+    ///References/detector.csv
+    d3.csv(csvRef, function (data) {
       //PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j
       var minX = Number.MAX_SAFE_INTEGER;
       var maxX = 0;
@@ -89,6 +110,25 @@ console.log('inside site.js')
             break;
           case "Si":
             elementPerRef = Number(filterData[i]["Si_%"]);
+      for (var i = 0; i < data.length; i++) {
+        switch (element) {
+          case "Mg":
+            elementPerRef = Number(data[i].Mg);
+            break;
+          case "Al":
+            elementPerRef = Number(data[i].Al);
+            break;
+          case "Ca":
+            elementPerRef = Number(data[i].Ca);
+            break;
+          case "Ti":
+            elementPerRef = Number(data[i].Ti);
+            break;
+          case "Fe":
+            elementPerRef = Number(data[i].Fe);
+            break;
+          case "Si":
+            elementPerRef = Number(data[i].Si);
             break;
         }
         if (elementPerRef < minPer) {
@@ -129,6 +169,31 @@ console.log('inside site.js')
 
       for (var j = 0; j <= 752; j++) {
         myImage_j.push(j);
+        if (Number(data[i].image_i) < minX) {
+          minX = Number(data[i].image_i);
+        }
+
+        if (Number(data[i].image_i) > maxX) {
+          maxX = Number(data[i].image_i);
+        }
+
+        if (Number(data[i].image_j) < minY) {
+          minY = Number(data[i].image_j);
+        }
+        if (data[i].image_j > maxY) {
+          maxY = Number(data[i].image_j);
+        }
+      }
+
+      var myImage_i = new Array(Math.ceil(maxX));
+      var myImage_j = new Array(Math.ceil(maxY));
+
+      for (var i = Math.floor(minX); i < myImage_i.length; i++) {
+        myImage_i[i] = i;
+      }
+
+      for (var j = Math.floor(minY); j < myImage_j.length; j++) {
+        myImage_j[j] = j;
       }
 
       // Build X scales and axis:
@@ -144,6 +209,9 @@ console.log('inside site.js')
             } else {
               return !((i - 1) % 50);
             }
+        .tickValues(
+          x.domain().filter(function (d, i) {
+            return !(i % 10);
           })
         );
       svg
@@ -174,6 +242,9 @@ console.log('inside site.js')
             } else {
               if (i != 751) return !((i - 1) % 50);
             }
+        .tickValues(
+          y.domain().filter(function (d, i) {
+            return !(i % 15);
           })
         );
 
@@ -219,6 +290,11 @@ console.log('inside site.js')
       // Build color scale
       var myColor = d3.scaleSequential().interpolator(elementColor).domain([minPer, maxPer]);
       //[Math.round(minPer * 10) / 10, Math.round(maxPer * 10) / 10]
+      // Build color scale
+      var myColor = d3
+        .scaleSequential()
+        .interpolator(d3.interpolatePuBu)
+        .domain([0, Math.round(maxPer * 10) / 10]);
 
       drawLegend("#legend", myColor);
 
@@ -263,12 +339,35 @@ console.log('inside site.js')
             break;
           case "Si":
             elementRef = d["Si_%"];
+            elementRef = d.Mg;
+
+            break;
+          case "Al":
+            elementRef = d.Al;
+
+            break;
+          case "Ca":
+            elementRef = d.Ca;
+
+            break;
+          case "Ti":
+            elementRef = d.Ti;
+
+            break;
+          case "Fe":
+            elementRef = d.Fe;
+
+            break;
+          case "Si":
+            elementRef = d.Si;
             break;
         }
         tooltip
           .html("<b>" + element + " %: </b>" + elementRef + " <br><b>Location: </b>" + d.image_i + " i : " + d.image_j + " j")
           .style("left", d3.mouse(this)[0] + (width - 650) + "px")
           .style("top", d3.mouse(this)[1] + (height - 475) + "px");
+          .style("left", d3.mouse(this)[0] + (width - 1500) + "px")
+          .style("top", d3.mouse(this)[1] + (height - 550) + "px");
       };
       var mouseleave = function (d) {
         tooltip.style("opacity", 0);
@@ -280,6 +379,7 @@ console.log('inside site.js')
       svg
         .selectAll()
         .data(filterData)
+        .data(data)
         .enter()
         .append("rect")
         .attr("x", function (d) {
@@ -316,6 +416,32 @@ console.log('inside site.js')
               break;
             case "Si":
               elementRef = d["Si_%"];
+        .attr("width", x.bandwidth() + 1.5)
+        .attr("height", y.bandwidth() + 3)
+        .style("fill", function (d) {
+          switch (element) {
+            case "Mg":
+              elementRef = d.Mg;
+
+              break;
+            case "Al":
+              elementRef = d.Al;
+
+              break;
+            case "Ca":
+              elementRef = d.Ca;
+
+              break;
+            case "Ti":
+              elementRef = d.Ti;
+
+              break;
+            case "Fe":
+              elementRef = d.Fe;
+
+              break;
+            case "Si":
+              elementRef = d.Si;
               break;
           }
           return myColor(elementRef);
@@ -365,6 +491,7 @@ console.log('inside site.js')
   // create continuous color legend
   function drawLegend(selector_id, colorscale) {
     var legendheight = 350,
+    var legendheight = 500,
       legendwidth = 100,
       margin = { top: 10, right: 60, bottom: 10, left: 2 };
 
