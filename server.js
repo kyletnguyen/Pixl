@@ -17,15 +17,17 @@ var response;
 
 var model = {
   element: "",
-  update: function (e) {
+  elementName: "",
+  update: function (e, eName) {
     this.element = e;
+    this.elementName = eName;
     view.render();
   },
 };
 
 var view = {
   render: function () {
-    response.render("element", { layout: false, element: model.element });
+    response.render("element", { layout: false, element: model.element, elementName: model.elementName });
   },
 };
 
@@ -35,35 +37,39 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/index.html"));
 });
 
+app.get("/About", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/about.html"));
+});
+
 app.get("/mg", function (req, res) {
   response = res;
-  model.update("Mg");
+  model.update("Mg", "Magnesium");
 });
 
 app.get("/al", function (req, res) {
   response = res;
-  model.update("Al");
+  model.update("Al", "Aluminum");
   // res.send("GET request for Al");
 });
 
 app.get("/ca", function (req, res) {
   response = res;
-  model.update("Ca");
+  model.update("Ca", "Calcium");
 });
 
 app.get("/ti", function (req, res) {
   response = res;
-  model.update("Ti");
+  model.update("Ti", "Titanium");
 });
 
 app.get("/fe", function (req, res) {
   response = res;
-  model.update("Fe");
+  model.update("Fe", "Iron");
 });
 
 app.get("/si", function (req, res) {
   response = res;
-  model.update("Si");
+  model.update("Si", "Silicon");
 });
 
 app.listen(port, () => console.log(`Hosting web application on port ${port}`));

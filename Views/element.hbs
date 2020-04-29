@@ -19,6 +19,7 @@
 
   <body class="element-page">
     <!-- PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="/">PIXL Heatmaps</a>
@@ -38,6 +39,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="/">Home</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Elements</a>
               <div class="dropdown-menu">
@@ -56,6 +60,8 @@
     <!-- Create a div where the graph will take place -->
 
     <input type="hidden" id="elementId" name="elementId" value="{{ element }}" />
+    
+    <input type="hidden" id="elementNameId" name="elementNameId" value="{{ elementName }}" />
     <div class="d-flex flex-row">
       <div class="d-flex justify-content-start">
         <div id="detector"></div>
