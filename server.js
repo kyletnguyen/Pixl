@@ -41,6 +41,10 @@ app.get("/About", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/about.html"));
 });
 
+app.get("/data", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/analytical.html"));
+});
+
 app.get("/mg", function (req, res) {
   response = res;
   model.update("Mg", "Magnesium");

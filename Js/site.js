@@ -1,6 +1,118 @@
 $(function () {
   if ($("body").is(".element-page")) {
     graphDetector();
+    initDataTable();
+  }
+
+  if ($("body").is(".data-page")) {
+    initDataTable2();
+  }
+
+  function initDataTable2() {
+    var csvRef = "/References/quantified_element_values.csv";
+    var minI = Number.MAX_SAFE_INTEGER;
+    var maxI = 0;
+    var minJ = Number.MAX_SAFE_INTEGER;
+    var maxJ = 0;
+    var dataSet = [];
+    d3.csv(csvRef, function (data) {
+      for (var i = 0; i < data.length; i++) {
+        if (Number(data[i]["image_i"]) > maxI) {
+          maxI = Number(data[i]["image_i"]);
+        }
+
+        if (Number(data[i]["image_i"]) < minI) {
+          minI = Number(data[i]["image_i"]);
+        }
+
+        if (Number(data[i]["image_j"]) > maxJ) {
+          maxJ = Number(data[i]["image_j"]);
+        }
+
+        if (Number(data[i]["image_j"]) < minJ) {
+          minJ = Number(data[i]["image_j"]);
+        }
+
+        var row = [];
+        //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
+        row.push(data[i]["PMC"]);
+        row.push(data[i]["Detector"]);
+
+        row.push(data[i]["Mg_%"]);
+        row.push(data[i]["Mg_int"]);
+
+        row.push(data[i]["Al_%"]);
+        row.push(data[i]["Al_int"]);
+
+        row.push(data[i]["Ca_%"]);
+        row.push(data[i]["Ca_int"]);
+
+        row.push(data[i]["Ti_%"]);
+        row.push(data[i]["Ti_int"]);
+
+        row.push(data[i]["Fe_%"]);
+        row.push(data[i]["Fe_int"]);
+
+        row.push(data[i]["Si_%"]);
+        row.push(data[i]["Si_int"]);
+
+        row.push(data[i]["image_i"]);
+        row.push(data[i]["image_j"]);
+        dataSet.push(row);
+      }
+
+      $("#dtElementData").DataTable({
+        data: dataSet,
+        columns: [
+          { title: "PMC" },
+          { title: "Detector" },
+          { title: "Mg_%" },
+          { title: "Mg_int" },
+          { title: "Al_%" },
+          { title: "Al_int" },
+          { title: "Ca_%" },
+          { title: "Ca_int" },
+          { title: "Ti_%" },
+          { title: "Ti_int" },
+          { title: "Fe_%" },
+          { title: "Fe_int" },
+          { title: "Si_%" },
+          { title: "Si_int" },
+          { title: "image_i" },
+          { title: "image_j" },
+        ],
+      });
+    });
+  }
+
+  function initDataTable() {
+    var csvRef = "/References/quantified_element_values.csv";
+    var element = $("#elementId").val();
+    var elementName = $("#elementNameId").val();
+    var detector = $("input[name='detector-select']:checked").val() === "A" ? "A" : "B";
+    var bIsDataPage = false;
+
+    var dataSet = [];
+    d3.csv(csvRef, function (data) {
+      for (var i = 0; i < data.length; i++) {
+        var row = [];
+        //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
+        if (data[i]["Detector"] === detector) {
+          row.push(data[i]["PMC"]);
+          row.push(data[i]["Detector"]);
+          row.push(data[i][element + "_%"]);
+          row.push(data[i][element + "_int"]);
+          row.push(data[i]["image_i"]);
+          row.push(data[i]["image_j"]);
+          dataSet.push(row);
+        }
+      }
+
+      $("#dtElement").DataTable({
+        data: dataSet,
+        columns: [{ title: "PMC" }, { title: "Detector" }, { title: element + "_%" }, { title: element + "_int" }, { title: "image_i" }, { title: "image_j" }],
+      });
+    });
   }
 
   function graphDetector() {
@@ -200,8 +312,8 @@ $(function () {
 
         tooltip
           .html("<b>" + element + " %: </b>" + elementRef + " <br><b>Location: </b>" + d.image_i + " i : " + d.image_j + " j")
-          .style("left", d3.mouse(this)[0] + (width - 650) + "px")
-          .style("top", d3.mouse(this)[1] + (height - 475) + "px");
+          .style("left", d3.mouse(this)[0] + (width - 225) + "px")
+          .style("top", d3.mouse(this)[1] + (height - 460) + "px");
       };
       var mouseleave = function (d) {
         tooltip.style("opacity", 0);
@@ -321,5 +433,8 @@ $(function () {
   //Event handlers
   $(".detector-btns").on("click", function (e) {
     graphDetector();
+    $("#dtElement").dataTable().fnClearTable();
+    $("#dtElement").dataTable().fnDestroy();
+    initDataTable();
   });
 });
