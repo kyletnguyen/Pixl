@@ -1,14 +1,123 @@
 $(function () {
   if ($("body").is(".element-page")) {
     graphDetector();
+    initDataTable();
+  }
+
+  if ($("body").is(".data-page")) {
+    initDataTable2();
+  }
+
+  function initDataTable2() {
+    var csvRef = "/References/quantified_element_values.csv";
+    var minI = Number.MAX_SAFE_INTEGER;
+    var maxI = 0;
+    var minJ = Number.MAX_SAFE_INTEGER;
+    var maxJ = 0;
+    var dataSet = [];
+    d3.csv(csvRef, function (data) {
+      for (var i = 0; i < data.length; i++) {
+        if (Number(data[i]["image_i"]) > maxI) {
+          maxI = Number(data[i]["image_i"]);
+        }
+
+        if (Number(data[i]["image_i"]) < minI) {
+          minI = Number(data[i]["image_i"]);
+        }
+
+        if (Number(data[i]["image_j"]) > maxJ) {
+          maxJ = Number(data[i]["image_j"]);
+        }
+
+        if (Number(data[i]["image_j"]) < minJ) {
+          minJ = Number(data[i]["image_j"]);
+        }
+
+        var row = [];
+        //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
+        row.push(data[i]["PMC"]);
+        row.push(data[i]["Detector"]);
+
+        row.push(data[i]["Mg_%"]);
+        row.push(data[i]["Mg_int"]);
+
+        row.push(data[i]["Al_%"]);
+        row.push(data[i]["Al_int"]);
+
+        row.push(data[i]["Ca_%"]);
+        row.push(data[i]["Ca_int"]);
+
+        row.push(data[i]["Ti_%"]);
+        row.push(data[i]["Ti_int"]);
+
+        row.push(data[i]["Fe_%"]);
+        row.push(data[i]["Fe_int"]);
+
+        row.push(data[i]["Si_%"]);
+        row.push(data[i]["Si_int"]);
+
+        row.push(data[i]["image_i"]);
+        row.push(data[i]["image_j"]);
+        dataSet.push(row);
+      }
+
+      $("#dtElementData").DataTable({
+        data: dataSet,
+        columns: [
+          { title: "PMC" },
+          { title: "Detector" },
+          { title: "Mg_%" },
+          { title: "Mg_int" },
+          { title: "Al_%" },
+          { title: "Al_int" },
+          { title: "Ca_%" },
+          { title: "Ca_int" },
+          { title: "Ti_%" },
+          { title: "Ti_int" },
+          { title: "Fe_%" },
+          { title: "Fe_int" },
+          { title: "Si_%" },
+          { title: "Si_int" },
+          { title: "image_i" },
+          { title: "image_j" },
+        ],
+      });
+    });
+  }
+
+  function initDataTable() {
+    var csvRef = "/References/quantified_element_values.csv";
+    var element = $("#elementId").val();
+    var elementName = $("#elementNameId").val();
+    var detector = $("input[name='detector-select']:checked").val() === "A" ? "A" : "B";
+    var bIsDataPage = false;
+
+    var dataSet = [];
+    d3.csv(csvRef, function (data) {
+      for (var i = 0; i < data.length; i++) {
+        var row = [];
+        //PMC,Detector,Mg_%,Al_%,Ca_%,Ti_%,Fe_%,Si_%,Mg_int,Al_int,Ca_int,Ti_int,Fe_int,Si_int,image_i,image_j
+        if (data[i]["Detector"] === detector) {
+          row.push(data[i]["PMC"]);
+          row.push(data[i]["Detector"]);
+          row.push(data[i][element + "_%"]);
+          row.push(data[i][element + "_int"]);
+          row.push(data[i]["image_i"]);
+          row.push(data[i]["image_j"]);
+          dataSet.push(row);
+        }
+      }
+
+      $("#dtElement").DataTable({
+        data: dataSet,
+        columns: [{ title: "PMC" }, { title: "Detector" }, { title: element + "_%" }, { title: element + "_int" }, { title: "image_i" }, { title: "image_j" }],
+      });
+    });
   }
 
   function graphDetector() {
     var element = $("#elementId").val();
-    var color = $("#colorId").val();
-
-    var elementName;
-    var elementPerRef;
+    var elementName = $("#elementNameId").val();
 
     // var csvRef = $("input[name='detector-select']:checked").val() === "A" ? "References/detA.csv" : "References/detB.csv";
     var csvRef = "/References/quantified_element_values.csv";
@@ -60,34 +169,13 @@ $(function () {
       });
 
       //PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j
-      var minX = Number.MAX_SAFE_INTEGER;
-      var maxX = 0;
-      var minY = Number.MAX_SAFE_INTEGER;
-      var maxY = 0;
       var minPer = Number.MAX_SAFE_INTEGER;
       var maxPer = 0;
-
+      var elementPer = element + "_%";
+      var elementPerRef;
       for (var i = 0; i < filterData.length; i++) {
-        switch (element) {
-          case "Mg":
-            elementPerRef = Number(filterData[i]["Mg_%"]);
-            break;
-          case "Al":
-            elementPerRef = Number(filterData[i]["Al_%"]);
-            break;
-          case "Ca":
-            elementPerRef = Number(filterData[i]["Ca_%"]);
-            break;
-          case "Ti":
-            elementPerRef = Number(filterData[i]["Ti_%"]);
-            break;
-          case "Fe":
-            elementPerRef = Number(filterData[i]["Fe_%"]);
-            break;
-          case "Si":
-            elementPerRef = Number(filterData[i]["Si_%"]);
-            break;
-        }
+        elementPerRef = Number(filterData[i][elementPer]);
+
         if (elementPerRef < minPer) {
           minPer = elementPerRef;
         }
@@ -95,36 +183,18 @@ $(function () {
         if (elementPerRef > maxPer) {
           maxPer = elementPerRef;
         }
-
-        if (Number(filterData[i].image_i) < minX) {
-          minX = Number(filterData[i].image_i);
-        }
-
-        if (Number(filterData[i].image_i) > maxX) {
-          maxX = Number(filterData[i].image_i);
-        }
-
-        if (Number(filterData[i].image_j) < minY) {
-          minY = Number(filterData[i].image_j);
-        }
-        if (filterData[i].image_j > maxY) {
-          maxY = Number(filterData[i].image_j);
-        }
       }
 
-      // var myImage_i = new Array(Math.ceil(maxX));
-      // var myImage_j = new Array(Math.ceil(maxY));
+      var myImage_i = [];
+      var myImage_j = [];
+      const xDim = 752 + 1;
+      const yDim = 580 + 1;
 
-      var myImage_i = new Array(580);
-      var myImage_j = new Array(752);
-      minX = 0;
-      minY = 0;
-
-      for (var i = 0; i <= 580; i++) {
+      for (var i = 0; i < xDim; i++) {
         myImage_i.push(i);
       }
 
-      for (var j = 0; j <= 752; j++) {
+      for (var j = 0; j < yDim; j++) {
         myImage_j.push(j);
       }
 
@@ -136,10 +206,10 @@ $(function () {
         .tickSizeOuter(0)
         .tickValues(
           x.domain().filter(function (d, i) {
-            if (i === 581) {
+            if (i === xDim - 1) {
               return i;
             } else {
-              return !((i - 1) % 50);
+              if (i != 750) return !(i % 50);
             }
           })
         );
@@ -166,10 +236,10 @@ $(function () {
         .tickSizeOuter(0)
         .tickValues(
           y.domain().filter(function (d, i) {
-            if (i === 753) {
+            if (i === yDim - 1) {
               return i;
             } else {
-              if (i != 751) return !((i - 1) % 50);
+              return !(i % 50);
             }
           })
         );
@@ -190,27 +260,27 @@ $(function () {
       var elementColor;
       switch (element) {
         case "Mg":
-          elementColor = d3.interpolateReds;
+          elementColor = d3.interpolatePurples;
 
           break;
         case "Al":
-          elementColor = d3.interpolatePuBu;
+          elementColor = d3.interpolateGreens;
 
           break;
         case "Ca":
-          elementColor = d3.interpolatePuBuGn;
+          elementColor = d3.interpolateBlues;
 
           break;
         case "Ti":
-          elementColor = d3.interpolateYlGnBu;
+          elementColor = d3.interpolateBuPu;
 
           break;
         case "Fe":
-          elementColor = d3.interpolateYlGn;
+          elementColor = d3.interpolateReds;
 
           break;
         case "Si":
-          elementColor = d3.interpolateYlOrBr;
+          elementColor = d3.interpolateYlGn;
           break;
       }
       // Build color scale
@@ -237,35 +307,13 @@ $(function () {
         d3.select(this).style("stroke", "red").style("opacity", 1);
       };
       var mousemove = function (d) {
-        switch (element) {
-          case "Mg":
-            elementRef = d["Mg_%"];
+        var elementPer = element + "_%";
+        elementRef = d[elementPer];
 
-            break;
-          case "Al":
-            elementRef = d["Al_%"];
-
-            break;
-          case "Ca":
-            elementRef = d["Ca_%"];
-
-            break;
-          case "Ti":
-            elementRef = d["Ti_%"];
-
-            break;
-          case "Fe":
-            elementRef = d["Fe_%"];
-
-            break;
-          case "Si":
-            elementRef = d["Si_%"];
-            break;
-        }
         tooltip
           .html("<b>" + element + " %: </b>" + elementRef + " <br><b>Location: </b>" + d.image_i + " i : " + d.image_j + " j")
-          .style("left", d3.mouse(this)[0] + (width - 650) + "px")
-          .style("top", d3.mouse(this)[1] + (height - 475) + "px");
+          .style("left", d3.mouse(this)[0] + (width - 225) + "px")
+          .style("top", d3.mouse(this)[1] + (height - 460) + "px");
       };
       var mouseleave = function (d) {
         tooltip.style("opacity", 0);
@@ -290,31 +338,8 @@ $(function () {
         .attr("width", x.bandwidth() + 1)
         .attr("height", y.bandwidth() + 1)
         .style("fill", function (d) {
-          switch (element) {
-            case "Mg":
-              elementRef = d["Mg_%"];
-
-              break;
-            case "Al":
-              elementRef = d["Al_%"];
-
-              break;
-            case "Ca":
-              elementRef = d["Ca_%"];
-
-              break;
-            case "Ti":
-              elementRef = d["Ti_%"];
-
-              break;
-            case "Fe":
-              elementRef = d["Fe_%"];
-
-              break;
-            case "Si":
-              elementRef = d["Si_%"];
-              break;
-          }
+          var elementPer = element + "_%";
+          elementRef = d[elementPer];
           return myColor(elementRef);
         })
         .style("stroke-width", 4)
@@ -324,27 +349,6 @@ $(function () {
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave);
     });
-
-    switch (element) {
-      case "Mg":
-        elementName = "Magnesium";
-        break;
-      case "Al":
-        elementName = "Aluminum";
-        break;
-      case "Ca":
-        elementName = "Calcium";
-        break;
-      case "Ti":
-        elementName = "Titanium";
-        break;
-      case "Fe":
-        elementName = "Iron";
-        break;
-      case "Si":
-        elementName = "Silicon";
-        break;
-    }
     // Add title to graph
     svg
       .append("text")
@@ -385,7 +389,7 @@ $(function () {
 
     var legendscale = d3
       .scaleLinear()
-      .range([1, legendheight - margin.top - margin.bottom])
+      .range([legendheight - margin.top - margin.bottom, 1])
       .domain(colorscale.domain());
 
     // image data hackery based on http://bl.ocks.org/mbostock/048d21cf747371b11884f75ad896e5a5
@@ -429,5 +433,8 @@ $(function () {
   //Event handlers
   $(".detector-btns").on("click", function (e) {
     graphDetector();
+    $("#dtElement").dataTable().fnClearTable();
+    $("#dtElement").dataTable().fnDestroy();
+    initDataTable();
   });
 });

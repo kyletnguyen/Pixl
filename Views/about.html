@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>PIXL Heatmaps</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./Styles/site.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/js/bootstrap.bundle.min.js"></script>
+    <script src="./Js/RadarChart.js"></script>
+    <script src="./Js/site.js"></script>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">PIXL Heatmaps</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/about">About</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Select Elements</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/mg">Magnesium</a>
+                <a class="dropdown-item" href="/al">Aluminum</a>
+                <a class="dropdown-item" href="/ca">Calcium</a>
+                <a class="dropdown-item" href="/ti">Titanium</a>
+                <a class="dropdown-item" href="/fe">Iron</a>
+                <a class="dropdown-item" href="/si">Silicon</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/data">Data Analysis</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="about bg-secondary text-center py-3 mb-4">
+      <div class="container">
+        <h1 class="font-weight-light text-white">Meet the Team</h1>
+        <div class="card-title mb-0 header-text">
+          COMP 584: Advanced Web Engineering<br />
+          Professor Li Liu<br />
+          Spring 2020
+        </div>
+      </div>
+    </header>
+    <!-- Content section -->
+    <!-- Page Content -->
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <!-- Team Member 1 -->
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-0 shadow">
+            <img src="/References/kyle.jpg" class="card-img-top" alt="..." />
+            <div class="card-body text-center">
+              <h5 class="card-title mb-0">Kyle Nguyen</h5>
+              <div class="card-text text-black-50">Backend & Frontend Developer</div>
+              <p class="card-info text-black-50">
+                With the development of new technologies, aerospace is responsible for many of the technological advances that are now part of our daily lives. Today aerospace
+                engineers are still working to help us view the edges of the universe as well as improve the way we live our lives here on planet earth.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Team Member 2 -->
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-0 shadow">
+            <img src="/References/jorge.jpg" class="card-img-top" alt="..." />
+            <div class="card-body text-center">
+              <h5 class="card-title mb-0">Jorge Lopez</h5>
+              <div class="card-text text-black-50">Backend & Frontend Developer</div>
+              <p class="card-info text-black-50">
+                Hi, my name is Jorge Lopez and I’m a computer science senior at California State University Northridge. I’ve enjoyed working on the PIXL project because I’ve always
+                been fascinated about learning new things, especially when it comes to science a technology. I’ve always admired the work of NASA and it’s an honor to be able to
+                present this project to them.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Team Member 3 -->
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-0 shadow">
+            <img src="https://source.unsplash.com/sNut2MqSmds/500x350" class="card-img-top" alt="..." />
+            <div class="card-body text-center">
+              <h5 class="card-title mb-0">Carl Austin Dimalanta</h5>
+              <div class="card-text text-black-50">Frontend Developer</div>
+              <p class="card-info text-black-50"></p>
+            </div>
+          </div>
+        </div>
+        <!-- Team Member 4 -->
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-0 shadow">
+            <img src="https://source.unsplash.com/ZI6p3i9SbVU/500x350" class="card-img-top" alt="..." />
+            <div class="card-body text-center">
+              <h5 class="card-title mb-0">Angelica Flores</h5>
+              <div class="card-text text-black-50">Frontend Developer</div>
+              <p class="card-info text-black-50"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Member 5 -->
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-0 shadow">
+            <img src="https://source.unsplash.com/ZI6p3i9SbVU/500x350" class="card-img-top" alt="..." />
+            <div class="card-body text-center">
+              <h5 class="card-title mb-0">Girly Lucena</h5>
+              <div class="card-text text-black-50">Frontend Developer</div>
+              <p class="card-info text-black-50"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- /.row -->
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; PIXL Heatmaps 2020</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+  </body>
+</html>
