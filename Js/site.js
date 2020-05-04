@@ -389,7 +389,7 @@ $(function () {
 
     var legendscale = d3
       .scaleLinear()
-      .range([1, legendheight - margin.top - margin.bottom])
+      .range([legendheight - margin.top - margin.bottom, 1])
       .domain(colorscale.domain());
 
     // image data hackery based on http://bl.ocks.org/mbostock/048d21cf747371b11884f75ad896e5a5
