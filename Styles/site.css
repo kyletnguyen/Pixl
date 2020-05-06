@@ -90,18 +90,27 @@ table.dataTable thead .sorting_desc_disabled:before {
 }
 
 .dt-data-page {
-  margin-top: 75px;
+  margin-top: 50px;
   margin-left: 25px;
   margin-right: 25px;
 }
+.binary-plots {
+  margin-top: 100px;
+}
 
-.d-inline-flex:not(:first-of-type) {
+.flex-row:not(:first-of-type) {
   margin-top: 20px;
 }
 
+.row-pad {
+  margin-right: 15px;
+}
 .btn-submit {
   margin-top: 30px;
 }
+.element-select {
+  width: 300px !important;
+}
 input[type="number"] {
-  width: 250px;
+  width: 300px;
 }

@@ -6,6 +6,8 @@ $(function () {
 
   if ($("body").is(".data-page")) {
     initDataTable2();
+    $(".error-alert").hide();
+    //graphScatterPlot();
   }
 
   function initDataTable2() {
@@ -85,6 +87,176 @@ $(function () {
     });
   }
 
+  $(".btn-submit").on("click", function (e) {
+    var element1 = $("#select-ele-1 option:selected").val();
+    var element2 = $("#select-ele-2 option:selected").val();
+    if (element1 === element2) {
+      $(".error-alert")
+        .fadeTo(2000, 500)
+        .slideUp(500, function () {
+          $(".error-alert").slideUp(500);
+        });
+    } else {
+      graphScatterPlot();
+    }
+  });
+
+  function graphScatterPlot() {
+    var csvRef = "/References/quantified_element_values.csv";
+    var detector = $("input[name='radioDet']:checked").val() === "A" ? "A" : "B";
+    var element1 = $("#select-ele-1 option:selected").val();
+    var element2 = $("#select-ele-2 option:selected").val();
+    var iLowB = $("#ilowB").val();
+    var iUppB = $("#iUppB").val();
+    var jLowB = $("#jLowB").val();
+    var jUppB = $("#JUppB").val();
+    var margin = { top: 30, right: 30, bottom: 55, left: 50 },
+      width = 520 - margin.left - margin.right,
+      height = 520 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3
+      .select("#binary-graph")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add the grey background that makes ggplot2 famous
+    svg.append("rect").attr("x", 0).attr("y", 0).attr("height", height).attr("width", height).style("fill", "EBEBEB");
+
+    //Read the data
+    d3.csv(csvRef, function (data) {
+      var filterData = data.filter(function (e) {
+        return e.Detector == detector;
+      });
+
+      //PMC,Mg,Al,Ca,Ti,Fe,Si,image_i,image_j
+      var minPer1 = Number.MAX_SAFE_INTEGER;
+      var maxPer1 = 0;
+      var minPer2 = Number.MAX_SAFE_INTEGER;
+      var maxPer2 = 0;
+      var elementPer1 = element1 + "_%";
+      var elementPerRef1;
+      var elementPer2 = element2 + "_%";
+      var elementPerRef2;
+
+      for (var i = 0; i < filterData.length; i++) {
+        // var eleI = Number(filterData[i]["image_i"]);
+        // var eleJ = Number(filterData[i]["image_j"]);
+        // if (eleI >= iLowB && eleI <= iUppB && eleJ >= jLowB && eleJ <= jUppB) {
+        elementPerRef1 = Number(filterData[i][elementPer1]);
+        elementPerRef2 = Number(filterData[i][elementPer2]);
+
+        if (elementPerRef1 < minPer1) {
+          minPer1 = elementPerRef1;
+        }
+
+        if (elementPerRef1 > maxPer1) {
+          maxPer1 = elementPerRef1;
+        }
+
+        if (elementPerRef2 < minPer2) {
+          minPer2 = elementPerRef2;
+        }
+
+        if (elementPerRef2 > maxPer2) {
+          maxPer2 = elementPerRef2;
+        }
+        // }
+      }
+      // Add X axis
+      var x = d3
+        .scaleLinear()
+        .domain([minPer1, maxPer1 + maxPer1 * 0.2])
+        .range([0, width]);
+      svg
+        .append("g")
+        .attr("transform", "translate(0," + (height + 5) + ")")
+        .call(
+          d3
+            .axisBottom(x)
+            .tickSize(-height * 1.3)
+            .ticks(10)
+        )
+        .select(".domain")
+        .remove();
+
+      // Add Y axis
+      var y = d3
+        .scaleLinear()
+        .domain([minPer2, maxPer2 + maxPer2 * 0.2])
+        .range([height, 0])
+        .nice();
+      svg
+        .append("g")
+        .attr("transform", "translate(-5," + "0)")
+        .call(
+          d3
+            .axisLeft(y)
+            .tickSize(-width * 1.3)
+            .ticks(7)
+        )
+        .select(".domain")
+        .remove();
+
+      // Customization
+      svg.selectAll(".tick line").attr("stroke", "white");
+
+      // Add X axis label:
+      svg
+        .append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width / 2 + margin.left - 30)
+        .attr("y", height + margin.top + 15)
+        .attr("font-weight", "bold")
+        .text(element1 + " %");
+
+      // Y axis label:
+      svg
+        .append("text")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 15)
+        .attr("x", -margin.top - height / 2 + 45)
+        .attr("font-weight", "bold")
+        .text(element2 + " %");
+
+      // Color scale: give me a specie name, I return a color
+      var color = d3.scaleOrdinal().domain(["setosa", "versicolor", "virginica"]).range(["#F8766D", "#00BA38", "#619CFF"]);
+
+      // Add dots
+      svg
+        .append("g")
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) {
+          if (d["Detector"] === detector) return x(d[element1 + "_%"]);
+        })
+        .attr("cy", function (d) {
+          if (d["Detector"] === detector) return y(d[element2 + "_%"]);
+        })
+        .attr("r", function (d) {
+          if (d["Detector"] === detector) return "5";
+        })
+        .style("fill", function (d) {
+          if (d["Detector"] === detector) return color("virginica");
+        });
+
+      svg
+        .append("text")
+        .attr("x", width / 2)
+        .attr("y", 0 - margin.top / 2)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .attr("font-weight", "bold")
+        .text(element1 + " vs. " + element2 + " Binary Plot (Detector " + detector + ")");
+    });
+  }
   function initDataTable() {
     var csvRef = "/References/quantified_element_values.csv";
     var element = $("#elementId").val();
